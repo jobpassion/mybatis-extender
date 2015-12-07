@@ -50,10 +50,11 @@ public class MybatisExtendMojo extends AbstractMojo {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        processResourcesDir("src/main/resources");
+        processResourcesDir(project.getFile().getParent() + "/src/main/resources");
     }
     private void processResourcesDir(String filename){
         File file = new File(filename);
+        System.out.println(file.getAbsoluteFile());
         if(file.isDirectory()){
             for(File f:file.listFiles()){
                 processResourcesDir(f.getAbsolutePath());
@@ -97,8 +98,7 @@ public class MybatisExtendMojo extends AbstractMojo {
             String parsed = origin.replaceAll("extend=\"([^\"]*)\"","");
             header = header.replaceAll("extend=\"([^\"]*)\"","");
             parsed = parsed.replace(header, header + "\n" + superContent);
-            System.out.println("mybatis extender: succeed:" + filename);
-            FileUtils.writeStringToFile(new File("target/classes" + filename.substring(filename.indexOf("resources") + 9)), parsed);
+            FileUtils.writeStringToFile(new File(project.getFile().getParent() + "/target/classes" + filename.substring(filename.indexOf("resources") + 9)), parsed);
         } catch (Exception e) {
             System.out.println("mybatis extender: error process file:" + filename);
 //            e.printStackTrace();
